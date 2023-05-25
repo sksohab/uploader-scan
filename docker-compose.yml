@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: uploader-scan-api
+    build:
+      context: ./
+      dockerfile: ./docker-files/Dockerfile
+    command: ['npm', 'run', 'start:dev']
+    environment:
+      PORT: 3311
+      CLAMAV_PORT: 3310
+    ports:
+      - 3311:3311
+      - 9239:9239
+    depends_on:
+      clamav:
+        condition: service_healthy
+    networks:
+      - uploader-scan
+  
+  clamav:
+    image: clamav/clamav
+    container_name: 'clamav'
+    ports:
+      - 3310:3310
+      - 7357:7357
+    networks:
+      - uploader-scan
+
+networks:
+  uploader-scan:
