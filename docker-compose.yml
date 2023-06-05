@@ -8,6 +8,10 @@ services:
       dockerfile: ./docker-files/Dockerfile
     command: ['npm', 'run', 'start:dev']
     environment:
+      VIRTUAL_HOST: uploadFileScanner-blockchain.ey.docker
+      HOST_NAME: http://uploadFileScanner-blockchain.ey.docker:3311
+      NODE_ENV: 'local-dev'
+      LOG_LEVEL: 'info'
       PORT: 3311
       CLAMAV_PORT: 3310
     ports:
@@ -18,7 +22,7 @@ services:
         condition: service_healthy
     networks:
       - uploader-scan
-  
+
   clamav:
     image: clamav/clamav
     container_name: 'clamav'
