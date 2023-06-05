@@ -1,12 +1,15 @@
 import {
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
+  Logger,
   Post,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { AppService } from './app.service';
 import NodeClam = require('clamscan');
 import { Readable } from 'stream';
@@ -35,7 +38,13 @@ export class AppController {
     });
     const { originalname, buffer } = file;
     const stream = Readable.from(buffer);
-    const { isInfected, viruses } = await clamscan.scanStream(stream);
+
+    const scanResult: any = await clamscan.scanStream(stream);
+    if (scanResult.isInfected === undefined) {
+      throw new HttpException(scanResult.data.error, HttpStatus.BAD_REQUEST);
+    }
+
+    const { isInfected, viruses } = scanResult;
     if (isInfected) {
       return {
         isInfected: isInfected,
@@ -46,7 +55,7 @@ export class AppController {
   }
 
   @Post('/scanFiles')
-  @UseInterceptors(FileInterceptor('files'))
+  @UseInterceptors(AnyFilesInterceptor())
   async scanFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
     const clamscan = await new NodeClam().init({
       debugMode: true,
@@ -56,24 +65,40 @@ export class AppController {
       },
     });
 
-    let anyInfectedFile = false;
-    let infectedFileNames = [];
-    files.forEach(async (file) => {
-      const { originalname, buffer } = file;
+    let scanError;
+    let finalScanResults = [];
+    const scanResultPromises = files.map((file) => {
+      const { buffer } = file;
       const stream = Readable.from(buffer);
-      const { isInfected, viruses } = await clamscan.scanStream(stream);
-      if (isInfected) {
-        anyInfectedFile = true;
-        infectedFileNames.push(originalname);
-      }
+      return clamscan.scanStream(stream);
     });
 
-    if (anyInfectedFile) {
-      return {
-        isInfected: true,
-        message: `Files: ${infectedFileNames} may be infected.`,
-      };
+    await Promise.all(scanResultPromises).then((scanResults) => {
+      scanResults.forEach((scanResult, i) => {
+        if (scanResult.isInfected === undefined) {
+          scanError = scanResult;
+          return;
+        }
+
+        const { isInfected, viruses } = scanResult;
+        if (isInfected) {
+          finalScanResults.push({
+            isInfected: isInfected,
+            message: `File: ${files[i].originalname} may be infected. Viruses found: ${viruses}`,
+          });
+          return;
+        }
+        finalScanResults.push({
+          isInfected: isInfected,
+          message: `File: ${files[i].originalname} is OK`,
+        });
+      });
+    });
+
+    if (scanError) {
+      throw new HttpException(scanError.data.error, HttpStatus.BAD_REQUEST);
     }
-    return { isInfected: false, message: `Files are OK` };
+
+    return finalScanResults;
   }
 }
