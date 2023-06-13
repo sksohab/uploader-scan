@@ -1,5 +1,4 @@
-![logo-small ede75a6b](https://github.com/sksohab/uploader-scan/assets/113328574/e9e87554-3c69-4595-aefe-01d4b96dedeb)
-![clamav_logo](https://github.com/sksohab/uploader-scan/assets/113328574/ed143c72-6dbd-4d20-ae40-0513b0b0caaf)
+![OIP](https://github.com/sksohab/uploader-scan/assets/113328574/c220f28a-75ec-4bed-bbfe-5ce2c21dab09) ![clamav_logo](https://github.com/sksohab/uploader-scan/assets/113328574/ed143c72-6dbd-4d20-ae40-0513b0b0caaf)
 
 
 ## Description
