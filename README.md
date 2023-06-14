@@ -1,5 +1,4 @@
-![OIP](https://github.com/sksohab/uploader-scan/assets/113328574/c220f28a-75ec-4bed-bbfe-5ce2c21dab09) ![clamav_logo](https://github.com/sksohab/uploader-scan/assets/113328574/ed143c72-6dbd-4d20-ae40-0513b0b0caaf) ![R](https://github.com/sksohab/uploader-scan/assets/113328574/34402d8d-db0a-4488-86a3-85547cd41e06)
-
+![OIP](https://github.com/sksohab/uploader-scan/assets/113328574/c220f28a-75ec-4bed-bbfe-5ce2c21dab09) ![clamav_logo](https://github.com/sksohab/uploader-scan/assets/113328574/ed143c72-6dbd-4d20-ae40-0513b0b0caaf) ![download](https://github.com/sksohab/uploader-scan/assets/113328574/a708d817-b2c6-454e-8a9d-4e811945e1bd)
 
 ## Description
 
