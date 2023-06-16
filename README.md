@@ -4,7 +4,9 @@
 
 This project has been developed using NestJS and ClamAV. ClamAV is an open source antivirus engine for detecting trojans, viruses, malware & other malicious threats. It scans uploaded file stream and return responses whether the file is infected or not with appropriate virus details. The default max file size limit is 10MB.
 
-![demo](https://github.com/sksohab/uploader-scan/assets/113328574/19f582ab-7b60-4be1-a975-bc1f2208e490)
+## Demo
+
+https://github.com/sksohab/uploader-scan/assets/113328574/74c1163c-87d0-4eb4-a7f3-144178e49b3d
 
 ## Installation
 
